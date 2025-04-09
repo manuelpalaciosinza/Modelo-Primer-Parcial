@@ -4,7 +4,6 @@ import lombok.*;
 
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -20,4 +19,12 @@ public class UsuarioEntity {
         this.email = email;
     }
 
+    @Override
+    public String toString() {
+        return "\nUsuarioEntity{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }

@@ -21,24 +21,28 @@ public class PrestamoRepository implements IRepository<PrestamoEntity> {
     }
 
     private Optional<PrestamoEntity> resultToPrestamo(ResultSet rs) throws SQLException{
+
+        /// Verificar que la fecha sea nula
+        LocalDate fecha = null;
+        String fechaDevolucion = rs.getString("fecha_devolucion");
+        if(fechaDevolucion != null) fecha = LocalDate.parse(fechaDevolucion);
+
         return Optional.of(PrestamoEntity.builder()
                 .id(rs.getInt("id"))
                 .libro_id(rs.getInt("libro_id"))
                 .usuario_id(rs.getInt("usuario_id"))
-                .fecha_prestamo(rs.getDate("fecha_prestamo").toLocalDate())
-                .fecha_devolucion(rs.getDate("fecha_devolucion").toLocalDate())
+                .fecha_prestamo(LocalDate.parse(rs.getString("fecha_prestamo")))
+                .fecha_devolucion(fecha)
                 .build());
 
     }
     @Override
     public void save(PrestamoEntity prestamo) throws SQLException {
-        String sql = "INSERT INTO prestamos (usuario_id,libro_id,fecha_prestamo,fecha_devolucion) VALUES(?,?,?,?)";
+        String sql = "INSERT INTO prestamos (usuario_id,libro_id) VALUES(?,?)";
         try (Connection connection = DataBaseConnection.getConnection();
         PreparedStatement ps = connection.prepareStatement(sql)){
             ps.setInt(1,prestamo.getUsuario_id());
             ps.setInt(2,prestamo.getLibro_id());
-            ps.setDate(3, Date.valueOf(prestamo.getFecha_prestamo()));
-            ps.setDate(4, Date.valueOf(prestamo.getFecha_devolucion()));
             ps.executeUpdate();
         }
     }

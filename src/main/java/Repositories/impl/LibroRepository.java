@@ -76,8 +76,8 @@ public class LibroRepository implements IRepository<LibroEntity> {
         PreparedStatement ps = connection.prepareStatement(sql);){
             try (ResultSet rs = ps.executeQuery()){
                 while (rs.next()){
-                    Optional<LibroEntity> libro = resultToLibro(rs);
-                    libro.ifPresent(libros::add);
+                    Optional<LibroEntity> libroOpt = resultToLibro(rs);
+                    libroOpt.ifPresent(libros::add);
                 }
             }
         }
