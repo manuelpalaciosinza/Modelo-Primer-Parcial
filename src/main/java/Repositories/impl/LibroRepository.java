@@ -21,14 +21,14 @@ public class LibroRepository implements IRepository<LibroEntity> {
         return instance;
     }
 
-    private LibroEntity resultToLibro(ResultSet rs) throws SQLException{
-        return LibroEntity.builder()
+    private Optional<LibroEntity> resultToLibro(ResultSet rs) throws SQLException{
+        return Optional.of(LibroEntity.builder()
                 .id(rs.getInt("id"))
                 .titulo(rs.getString("titulo"))
                 .autor(rs.getString("autor"))
                 .anio_publicacion(rs.getInt("anio_publicacion"))
                 .unidades_disponibles(rs.getInt("unidades_disponibles"))
-                .build();
+                .build());
     }
 
     @Override
@@ -76,7 +76,7 @@ public class LibroRepository implements IRepository<LibroEntity> {
         PreparedStatement ps = connection.prepareStatement(sql);){
             try (ResultSet rs = ps.executeQuery()){
                 while (rs.next()){
-                    Optional<LibroEntity> libro = Optional.of(resultToLibro(rs));
+                    Optional<LibroEntity> libro = resultToLibro(rs);
                     libro.ifPresent(libros::add);
                 }
             }
@@ -91,7 +91,7 @@ public class LibroRepository implements IRepository<LibroEntity> {
         PreparedStatement ps = connection.prepareStatement(sql)){
             try (ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
-                    return Optional.of(resultToLibro(rs));
+                    return resultToLibro(rs);
                 }
                 return Optional.empty();
             }
