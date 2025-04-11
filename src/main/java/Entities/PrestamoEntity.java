@@ -7,7 +7,6 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Builder
 
 public class PrestamoEntity {
@@ -20,5 +19,16 @@ public class PrestamoEntity {
     public PrestamoEntity(Integer libro_id,Integer usuario_id){
         this.libro_id = libro_id;
         this.usuario_id = usuario_id;
+    }
+
+    @Override
+    public String toString() {
+        return "\nPrestamoEntity{" +
+                "id=" + id +
+                ", libro_id=" + libro_id +
+                ", usuario_id=" + usuario_id +
+                ", fecha_prestamo=" + fecha_prestamo +
+                ", fecha_devolucion=" + fecha_devolucion +
+                '}';
     }
 }

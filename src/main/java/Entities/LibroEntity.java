@@ -6,7 +6,6 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Builder
 public class LibroEntity {
     private Integer id; //PK AUTO
@@ -21,5 +20,16 @@ public class LibroEntity {
         this.autor = autor;
         this.anio_publicacion = anio_publicacion;
         this.unidades_disponibles = unidades_disponibles;
+    }
+
+    @Override
+    public String toString() {
+        return "\nLibroEntity{" +
+                "id=" + id +
+                ", titulo='" + titulo + '\'' +
+                ", autor='" + autor + '\'' +
+                ", anio_publicacion=" + anio_publicacion +
+                ", unidades_disponibles=" + unidades_disponibles +
+                '}';
     }
 }

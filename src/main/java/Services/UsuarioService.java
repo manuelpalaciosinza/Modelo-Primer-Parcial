@@ -90,4 +90,26 @@ public class UsuarioService {
         }
         return listaUsuarios;
     }
+
+    public Optional<UsuarioEntity> usuarioConMasPrestamos(){
+        try {
+            ///Creo un mapa con clave id usuario y valor cantidad de prestamos de ese usuario
+            Map<Integer,Long> mapaPrestamos = prestamoRepository.findAll().stream()
+                    .collect(Collectors.groupingBy(PrestamoEntity::getUsuario_id,
+                            Collectors.counting()));
+            ///Filtro el mapa para conseguir la entrada con mayor valor, es decir el id usuario con mas prestamos asociados
+            Optional<Map.Entry<Integer,Long>> mayorEntry = mapaPrestamos.entrySet().stream()
+                    .max(Map.Entry.<Integer,Long>comparingByValue());
+
+            ///Abro esa entrada optional y busco el libro con ese id y lo retorno
+            if (mayorEntry.isPresent()){
+                int idUsuarioMasPrestamos = mayorEntry.get().getKey();
+                return usuarioRepository.findById(idUsuarioMasPrestamos);
+            }
+
+        }catch (SQLException e){
+            System.out.println("Error al buscar el usuario con mas prestamos: " + e.getMessage());
+        }
+        return Optional.empty();
+    }
 }

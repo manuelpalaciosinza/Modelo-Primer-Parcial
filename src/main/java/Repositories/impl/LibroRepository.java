@@ -89,6 +89,7 @@ public class LibroRepository implements IRepository<LibroEntity> {
         String sql = "SELECT * FROM libros WHERE id = ?";
         try (Connection connection = DataBaseConnection.getConnection();
         PreparedStatement ps = connection.prepareStatement(sql)){
+            ps.setInt(1,id);
             try (ResultSet rs = ps.executeQuery()){
                 if(rs.next()){
                     return resultToLibro(rs);
