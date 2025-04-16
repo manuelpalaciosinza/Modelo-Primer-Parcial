@@ -52,10 +52,10 @@ public class Main {
         prestamoService.cargarPrestamo(prestamo);
          */
 
-        /*
+
         ///Devolver Prestamo
-        prestamoService.devolverPrestamo(prestamo);
-         */
+        prestamoService.devolverPrestamo(2);
+
         /*
         ///Ver todos los prestamos
         System.out.println("Prestamos:" + prestamoService.verTodos());
@@ -76,7 +76,8 @@ public class Main {
         usuarioEntityOptional.ifPresent(System.out::println);
 
          */
+        /*
         System.out.println("Promedio de prestamos por usuarios: " + prestamoService.promedioPrestamos());
-
+        */
     }
 }

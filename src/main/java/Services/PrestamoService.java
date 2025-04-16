@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class PrestamoService {
@@ -56,16 +57,28 @@ public class PrestamoService {
     }
 
     ///Esta roto por el tema de date null. Consultar en clase
-    public void devolverPrestamo(PrestamoEntity prestamo){
+    public void devolverPrestamo(int id_prestamo){
         try {
-            LocalDate fechaDevolucion = LocalDate.now();
-            //Al devolver el libro, se suma el stock y se actualiza la fecha de devolucion del prestamo
-            prestamo.setFecha_devolucion(fechaDevolucion);
-            prestamoRepository.update(prestamo);
-            sumarStock(prestamo.getLibro_id());
-            System.out.println("Prestamo devuelto con exito");
+            Optional <PrestamoEntity> prestamoEntityOptional = prestamoRepository.findById(id_prestamo);
+            if(prestamoEntityOptional.isPresent()){
+                PrestamoEntity prestamoEntity = prestamoEntityOptional.get();
+                if (prestamoEntity.getFecha_devolucion() == null){
+                    prestamoEntity.setFecha_devolucion(LocalDate.now());
+                    prestamoRepository.update(prestamoEntity);
+                    sumarStock(prestamoEntity.getLibro_id());
+                    System.out.println("Prestamo devuelto con exito");
+                }
+                else {
+                    throw new IllegalStateException("El prestamo ya fue devuelto");
+                }
+            }
+            else {
+                throw new NoSuchElementException("Usuario no encontrado");
+            }
         }catch (SQLException e){
             System.out.println("Error al devolver el prestamo: " + e.getMessage());
+        }catch (IllegalStateException | NoSuchElementException e){
+            System.out.println(e.getMessage());
         }
     }
 
